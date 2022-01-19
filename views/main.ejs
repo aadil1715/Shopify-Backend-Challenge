@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <title>Inventory App</title>
+        <script src="/main.js"></script>
+    </head>
+    <body>
+        <button id="updatebtn">Delete Products</button>
+        <button>Update a product</button>
+        <button>Add a new product</button> 
+        <table>
+        <tr>
+            <td>Name</td>
+            <td>Price</td>
+            <td>Quantity</td>
+        </tr>
+
+        <% for (var i=0; i<items.length ;i++) {%>
+        <tr>
+            <td><%= items[i].name %></td>
+            <td><%= items[i].price %></td>
+            <td><%= items[i].quantity %></td>
+        </tr>
+        <% } %>
+
+
+       
+        </table>
+    </body>
+</html>

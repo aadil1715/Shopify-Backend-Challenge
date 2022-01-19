@@ -1,5 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const alert = require("alert");
+var popup = require("popups");
 const app = express();
 const mongoClient = require("mongodb").MongoClient;
 
@@ -34,7 +36,42 @@ mongoClient
         });
     });
 
-    app.put("/updateproduct", (req, res) => {});
+    app.post("/updateproduct", (req, res) => {
+      console.log("HELLOOOO");
+      app.use(bodyParser.json());
+      console.log(req.body);
+      const cursor = db
+        .collection("inventory")
+        .findOneAndUpdate(
+          { name: req.body.name },
+          {
+            $set: {
+              quantity: req.body.quantity,
+              price: req.body.price,
+            },
+          },
+          {
+            new: false,
+          }
+        )
+        .then((results) => {
+          console.log(results);
+          if (JSON.stringify(results).search("updateExisting:false")) {
+            popup.alert({ content: "No existing product" });
+            res.redirect("/");
+          } else {
+            popup.alert({ content: "Updated successfully" });
+            res.redirect("/");
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    });
+
+    app.get("/updateproduct", (req, res) => {
+      res.sendFile(__dirname + "/updateproduct.html");
+    });
 
     app.get("/addproduct", (req, res) => {
       res.sendFile(__dirname + "/addproduct.html");

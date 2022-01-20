@@ -1,7 +1,5 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const alert = require("alert");
-var popup = require("popups");
 const app = express();
 const mongoClient = require("mongodb").MongoClient;
 
@@ -25,7 +23,7 @@ mongoClient
       //   res.sendFile(__dirname + "/main.html");
       const cursor = db
         .collection("inventory")
-        .find()
+        .find({ price: { $ne: null } })
         .toArray()
         .then((results) => {
           console.log(results);
@@ -55,17 +53,27 @@ mongoClient
           }
         )
         .then((results) => {
-          console.log(results);
-          if (JSON.stringify(results).search("updateExisting:false")) {
-            popup.alert({ content: "No existing product" });
+          console.log("RESULT :");
+          if (JSON.stringify(results).includes("false") === true) {
             res.redirect("/");
           } else {
-            popup.alert({ content: "Updated successfully" });
             res.redirect("/");
           }
         })
         .catch((error) => {
           console.error(error);
+        });
+    });
+
+    app.post("/deleteproduct", (req, res) => {
+      app.use(bodyParser.json());
+      console.log(req.body);
+      const cursor = db
+        .collection("inventory")
+        .deleteOne({ name: req.body.name })
+        .then((results) => {
+          console.log(results);
+          res.redirect("/");
         });
     });
 
@@ -75,6 +83,10 @@ mongoClient
 
     app.get("/addproduct", (req, res) => {
       res.sendFile(__dirname + "/addproduct.html");
+    });
+
+    app.get("/deleteproduct", (req, res) => {
+      res.sendFile(__dirname + "/deleteproduct.html");
     });
 
     app.post("/addproduct", (req, res) => {

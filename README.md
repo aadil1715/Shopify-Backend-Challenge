@@ -7,8 +7,11 @@ For running the app:
 
 node -v
 
-2) If node is installed, Open the folder and type "npm run dev" in terminal.
 
-3) The app will start at localhost:5000
+2) If node is installed, Open the folder and type "npm install" in the terminal to install the dependencies.
+
+3) type "npm run dev" in terminal.
+
+4) The app will start at localhost:5000
 
 It has the features of basic CRUD.
